@@ -5,8 +5,7 @@ const props = defineProps({
     pizza: Object
 
 })
-const activeCurstType=ref(1);
-const activeCurstSize=ref(1);
+
 
 const crustTypes = ref([
   { id: 1, name: 'Тонкое' },
@@ -30,7 +29,10 @@ const pizzaSizes = ref([
     { id: 2, diameter: 30 },
     { id: 3, diameter: 35 },
 ]);
-console.log(props.pizza.crust_diameter);
+
+const activeCurstType=ref(props.pizza.crust_type[0].id);
+const activeCurstSize=ref(props.pizza.crust_diameter[0].id);
+
 const pizzaSizesInProduction = pizzaSizes.value.map(pizzaSize => {
   return {
     ...pizzaSize,
@@ -38,7 +40,6 @@ const pizzaSizesInProduction = pizzaSizes.value.map(pizzaSize => {
   };
 });
 
-console.log(pizzaSizesInProduction);
 const changeCrustTypes=(id)=>{
   activeCurstType.value=id
 }
@@ -46,6 +47,7 @@ const changeCrustTypes=(id)=>{
 const changePizzaSize=(id)=>{
   activeCurstSize.value=id
 }
+
 </script>
 
 <template>
@@ -78,7 +80,7 @@ const changePizzaSize=(id)=>{
       </div>
     </div>
     <div class="container_pizza_price_add">
-      <div class="pizza_price">от 900 ₽</div>
+      <div class="pizza_price">от {{ props.pizza.price }} $</div>
       <div class="pizza_add"><img src="../assets/images/add.svg" alt=""> Добавить</div>
     </div>
   </div>

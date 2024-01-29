@@ -1,67 +1,39 @@
 <script setup>
 import Dropdown from 'primevue/dropdown';
-import { ref } from "vue";
+import { ref, defineProps, defineEmits, watch } from "vue";
 
+const props = defineProps({
+    filters: Array,
+    sortItems: Array,
+    selectedFilter: Array
+});
 
-const selectedFilter = ref();
-const selectedCity = ref();
+const localSortItem=ref()
 
-const filters = ref([
-    { id: 1, name: 'Все', isSelected: true },
-    { id: 2, name: 'Мясная', isSelected: false },
-    { id: 3, name: 'Морская', isSelected: false },
-    { id: 4, name: 'Острая', isSelected: false },
-    { id: 5, name: 'Белая', isSelected: false },
-    { id: 6, name: 'Фруктовая', isSelected: false },
-    { id: 7, name: 'По сезону', isSelected: false },
-]);
-const cities = ref([
-    { name: 'New York', code: 'NY' },
-    { name: 'Rome', code: 'RM' },
-    { name: 'London', code: 'LDN' },
-    { name: 'Istanbul', code: 'IST' },
-    { name: 'Paris', code: 'PRS' }
-]);
+const emit = defineEmits(['changeFilter', 'installSortedItem']);
 
-const changeFilter = (id) => {
-  filters.value.map((item)=>{
-    if(item.id === id){
-        selectedFilter.value=item
-        item.isSelected = true;
-    }else{
-        
-        item.isSelected = false;
-    }
-    
-  })
-  
-}
-
+watch(localSortItem, ()=>{
+   
+  emit('installSortedItem', localSortItem.value)
+});
 </script>
 
 <template>
     <div class="container">
         <div class="container_block_filters">
-            <div v-for="filter in filters" :key="filter.id"
-                :class="{active: filter.isSelected,'filter_item': true} "
-                @click="changeFilter(filter.id)"
-                >
+            <div v-for="filter in props.filters" :key="filter.id"
+                :class="{ active: filter.id === props.selectedFilter[0], 'filter_item': true }"
+                @click="emit('changeFilter', filter.id)">
                 {{ filter.name }}
-      
             </div>
-
         </div>
         <div class="content_block_sort">
             Сортировка по
-            <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City"
+            <Dropdown v-model="localSortItem" :options="props.sortItems" optionLabel="name" placeholder="Сортировать"
                 class="w-full md:w-[14rem]" />
-
         </div>
-
     </div>
 </template>
-
-
 
 <style scoped lang="scss">
 .container {
@@ -80,12 +52,9 @@ const changeFilter = (id) => {
     padding: 15px;
     background-color: #F9F9F9;
     border-radius: 25px;
-
-
 }
-.active{
+
+.active {
     background-color: rgb(208, 246, 255);
 }
-
-
 </style>

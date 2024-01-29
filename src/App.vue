@@ -24,7 +24,6 @@ import Main from './components/Main.vue';
 <style scoped>
 .main-wrapper {
   width: 100%;
-  
 
 }
 
