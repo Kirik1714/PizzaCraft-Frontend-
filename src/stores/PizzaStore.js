@@ -24,7 +24,9 @@ export const usePizzaStore = defineStore('pizza',  {
             console.log('Не удалочь получить пиццы', error)
         }
     }
-  }
+  },
+
+
    
 
 

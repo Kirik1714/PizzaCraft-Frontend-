@@ -1,21 +1,29 @@
-<script setup></script>
+<script setup>
+import { RouterLink } from 'vue-router';
+</script>
 
 <template>
     <header>
         <nav class="nav">
-            <div class="nav_info_block">
-                <div class="info_block_logo"><img src="../assets/images/logo.svg" alt=""></div>
-                <div class="info_block_description">
-                    <p class="info_block_title">VUE PIZZA</p>
-                    <p class="info_block_subtitle">самая вкусная пицца во вселенной</p>
+            <RouterLink to="/" class="custom-link">
+                <div class="nav_info_block">
+
+                    <div class="info_block_logo"><img src="../assets/images/logo.svg" alt=""></div>
+                    <div class="info_block_description">
+                        <p class="info_block_title">VUE PIZZA</p>
+                        <p class="info_block_subtitle">самая вкусная пицца во вселенной</p>
+                    </div>
                 </div>
-            </div>
+            </RouterLink>
             <div class="nav_user_block">
-                <div class="user_block_basket">
-                    <div class="block_basket_price">100 ₽</div>
-                    <div class="block_basket_split"></div>
-                    <div class="block_basket_img"><img src="../assets/images/basket.svg" alt="">3</div>
-                </div>
+                <RouterLink to="/basket" class="custom-link">
+
+                    <div class="user_block_basket">
+                        <div class="block_basket_price">100 ₽</div>
+                        <div class="block_basket_split"></div>
+                        <div class="block_basket_img"><img src="../assets/images/basket.svg" alt="">3</div>
+                    </div>
+                </RouterLink>
                 <div class="user_block_account">
                     <img src="../assets/images/account.svg" alt="">
                 </div>
@@ -25,12 +33,17 @@
 </template>
 
 <style scoped lang="scss">
+
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom:25px ;
+    margin-bottom: 25px;
 
+    .custom-link {
+    color: inherit; /* или ваш цвет текста */
+    text-decoration: none; /* убирает подчеркивание, если необходимо */
+}
     &_info_block {
         display: flex;
         gap: 17px;
@@ -54,6 +67,7 @@
     font-weight: 900;
     font-size: 22px;
 }
+
 .info_block_subtitle {
     font-size: 14px;
     color: gray;
@@ -77,4 +91,5 @@
 .block_basket_img {
     display: flex;
     gap: 4px;
-}</style>
+}
+</style>

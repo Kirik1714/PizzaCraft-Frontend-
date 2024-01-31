@@ -1,8 +1,7 @@
 <script setup>
 
-
 </script>
 
-<template> 
-test
+<template>
+    sdfsdf
 </template>

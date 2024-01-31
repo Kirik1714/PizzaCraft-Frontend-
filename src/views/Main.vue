@@ -1,13 +1,13 @@
 <script setup>
 import Paginator from 'primevue/paginator';
-import PizzaSkeleton from './PizzaSkeleton.vue';
+import PizzaSkeleton from '../components/PizzaSkeleton.vue';
 
 import { onMounted, ref, watch,toRefs } from 'vue';
 import {usePizzaStore} from '../stores/PizzaStore'
 import {useFilterStore} from '../stores/FilterStore'
 
-import Filter from './Filter.vue';
-import Pizza from './Pizza.vue'
+import Filter from '../components/Filter.vue';
+import Pizza from '../components/Pizza.vue'
 
 
 
@@ -16,16 +16,6 @@ const filterStore=useFilterStore();
 
 
 const page = ref(0)
-
-
-
-
-
-
-
-
-
-
 
 
 const { selectedFilter ,selectedSorted} = toRefs(filterStore);
@@ -47,7 +37,7 @@ watch([selectedFilter, selectedSorted, page], () => {
     <div class="container">
         <div class="container_filters">
 
-            <Filter     />
+            <Filter />
         </div>
 
         <div class="container_main">

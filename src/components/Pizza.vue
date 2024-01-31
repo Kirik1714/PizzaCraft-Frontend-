@@ -1,10 +1,11 @@
 <script setup>
-import { ref,defineProps } from "vue";
-
+import { ref,defineProps, computed } from "vue";
+import {usePizzaStore} from '../stores/PizzaStore'
 const props = defineProps({
     pizza: Object
 
 })
+const pizzaStore=usePizzaStore();
 
 
 const crustTypes = ref([
@@ -48,6 +49,10 @@ const changePizzaSize=(id)=>{
   activeCurstSize.value=id
 }
 
+const calcPrice=computed(()=>{
+  return props.pizza.price*activeCurstSize.value
+})
+
 </script>
 
 <template>
@@ -80,8 +85,8 @@ const changePizzaSize=(id)=>{
       </div>
     </div>
     <div class="container_pizza_price_add">
-      <div class="pizza_price">от {{ props.pizza.price }} $</div>
-      <div class="pizza_add"><img src="../assets/images/add.svg" alt=""> Добавить</div>
+      <div class="pizza_price">от {{ calcPrice }} $</div>
+      <div class="pizza_add" @click="console.log({id :props.pizza.id,crust_type:crustTypes[activeCurstType-1],crust_diameter:pizzaSizes[activeCurstSize-1],price:calcPrice})" ><img src="../assets/images/add.svg" alt=""  > Добавить</div>
     </div>
   </div>
 </template>
