@@ -1,5 +1,8 @@
 <script setup>
 import { RouterLink } from 'vue-router';
+import {useBasketStore} from '../stores/BasketStore';
+
+const basketStore=useBasketStore();
 </script>
 
 <template>
@@ -19,9 +22,9 @@ import { RouterLink } from 'vue-router';
                 <RouterLink to="/basket" class="custom-link">
 
                     <div class="user_block_basket">
-                        <div class="block_basket_price">100 ₽</div>
+                        <div class="block_basket_price">{{ basketStore.getTotalPrice }} $</div>
                         <div class="block_basket_split"></div>
-                        <div class="block_basket_img"><img src="../assets/images/basket.svg" alt="">3</div>
+                        <div class="block_basket_img"><img src="../assets/images/basket.svg" alt="">{{ basketStore.countPizza }}</div>
                     </div>
                 </RouterLink>
                 <div class="user_block_account">

@@ -1,11 +1,14 @@
 <script setup>
-import { ref,defineProps, computed } from "vue";
-import {usePizzaStore} from '../stores/PizzaStore'
+import { ref, defineProps, computed } from "vue";
+import { usePizzaStore } from '../stores/PizzaStore'
+import { useBasketStore } from '../stores/BasketStore';
+
+const basketStore = useBasketStore();
 const props = defineProps({
-    pizza: Object
+  pizza: Object
 
 })
-const pizzaStore=usePizzaStore();
+const pizzaStore = usePizzaStore();
 
 
 const crustTypes = ref([
@@ -14,79 +17,73 @@ const crustTypes = ref([
 ]);
 
 
-const crustTypesInProdunction =crustTypes.value.map(crustType =>{
+const crustTypesInProdunction = crustTypes.value.map(crustType => {
   return {
     ...crustType,
-    isInProduction : props.pizza.crust_type.some(crustSize=>crustSize.id===crustType.id),
-     
+    isInProduction: props.pizza.crust_type.some(crustSize => crustSize.id === crustType.id),
+
   }
-})  
+})
 
 
 
 
 const pizzaSizes = ref([
-    { id: 1, diameter: 25 },
-    { id: 2, diameter: 30 },
-    { id: 3, diameter: 35 },
+  { id: 1, diameter: 25 },
+  { id: 2, diameter: 30 },
+  { id: 3, diameter: 35 },
 ]);
 
-const activeCurstType=ref(props.pizza.crust_type[0].id);
-const activeCurstSize=ref(props.pizza.crust_diameter[0].id);
+const activeCurstType = ref(props.pizza.crust_type[0].id);
+const activeCurstSize = ref(props.pizza.crust_diameter[0].id);
 
 const pizzaSizesInProduction = pizzaSizes.value.map(pizzaSize => {
   return {
     ...pizzaSize,
-    isInProduction: props.pizza.crust_diameter.some(crustDiameter => crustDiameter.id === pizzaSize.id),  
+    isInProduction: props.pizza.crust_diameter.some(crustDiameter => crustDiameter.id === pizzaSize.id),
   };
 });
 
-const changeCrustTypes=(id)=>{
-  activeCurstType.value=id
+const changeCrustTypes = (id) => {
+  activeCurstType.value = id
 }
 
-const changePizzaSize=(id)=>{
-  activeCurstSize.value=id
+const changePizzaSize = (id) => {
+  activeCurstSize.value = id
 }
 
-const calcPrice=computed(()=>{
-  return props.pizza.price*activeCurstSize.value
+const calcPrice = computed(() => {
+  return props.pizza.price * activeCurstSize.value
 })
 
 </script>
 
 <template>
   <div class="container">
-    <div class="container_img"><img :src="props.pizza.image_url " alt=""></div>
+    <div class="container_img"><img :src="props.pizza.image_url" alt=""></div>
     <div class="container_title">{{ props.pizza.name }}</div>
     <div class="container_pizza_options">
       <div class="pizza_option types">
-        <div
-          v-for="crustType in crustTypesInProdunction"
-          :key="crustType.id"
-          :class="{ 'active':  activeCurstType===crustType.id?true:'', 'btn_type': true, 'btn_disabled':!crustType.isInProduction}"
-          @click="changeCrustTypes(crustType.id)"
-        >
+        <div v-for="crustType in crustTypesInProdunction" :key="crustType.id"
+          :class="{ 'active': activeCurstType === crustType.id ? true : '', 'btn_type': true, 'btn_disabled': !crustType.isInProduction }"
+          @click="changeCrustTypes(crustType.id)">
           {{ crustType.name }}
         </div>
       </div>
 
       <div class="pizza_option size">
-        <div
-          v-for="size in pizzaSizesInProduction"
-          :key="size.id"
-          :class="{ 'active': activeCurstSize===size.id?true:'', 'btn_type':true,'btn_disabled':!size.isInProduction }"
-          @click="changePizzaSize(size.id)"
-
-          
-        >
+        <div v-for="size in pizzaSizesInProduction" :key="size.id"
+          :class="{ 'active': activeCurstSize === size.id ? true : '', 'btn_type': true, 'btn_disabled': !size.isInProduction }"
+          @click="changePizzaSize(size.id)">
           {{ size.diameter }} см
         </div>
       </div>
     </div>
     <div class="container_pizza_price_add">
       <div class="pizza_price">от {{ calcPrice }} $</div>
-      <div class="pizza_add" @click="console.log({id :props.pizza.id,crust_type:crustTypes[activeCurstType-1],crust_diameter:pizzaSizes[activeCurstSize-1],price:calcPrice})" ><img src="../assets/images/add.svg" alt=""  > Добавить</div>
+      <div class="pizza_add "  
+        @click.prevent="basketStore.addToBasket({ id: props.pizza.id,name: props.pizza.name, img_url:props.pizza.image_url,crust_type: crustTypes[activeCurstType - 1], crust_diameter: pizzaSizes[activeCurstSize - 1], price: calcPrice })">
+        <img src="../assets/images/add.svg" alt=""> Добавить </div>
     </div>
   </div>
 </template>
@@ -127,10 +124,11 @@ const calcPrice=computed(()=>{
 
       .btn_type {
         padding: 10px;
-    
+
         border-radius: 10px;
       }
-      .btn_disabled{
+
+      .btn_disabled {
         pointer-events: none;
         opacity: 0.5;
       }
@@ -158,6 +156,17 @@ const calcPrice=computed(()=>{
       border-radius: 15px;
       font-size: 14px;
       padding: 11px;
+      cursor: pointer;
+
+      &:hover {
+      border: 2px solid rgb(20, 177, 212);  
+
+        background-color: rgb(20, 177, 212);
+        cursor: pointer;
+        color: #FFFFFF;
+        animation-duration: 1ms;
+
+      }
 
       img {
         width: 15px;
