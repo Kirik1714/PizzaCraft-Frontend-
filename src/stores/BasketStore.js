@@ -7,7 +7,6 @@ export const useBasketStore = defineStore("basket", () => {
 
   const pizzaInLocalStorage = localStorage.getItem('pizzazInBasket');
   if (pizzaInLocalStorage !== null) {
-    console.log(JSON.parse(pizzaInLocalStorage));
     pizzazInBasket.value = JSON.parse(pizzaInLocalStorage);
   }
   
@@ -64,7 +63,7 @@ export const useBasketStore = defineStore("basket", () => {
     );
   });
   watch(pizzazInBasket,(state)=>{
-    console.log(state)
+
     localStorage.setItem('pizzazInBasket',JSON.stringify(state))
   },{
     deep:true

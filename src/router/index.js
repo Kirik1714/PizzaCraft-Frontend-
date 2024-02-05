@@ -14,7 +14,13 @@ const router = createRouter({
       path:'/basket',
       name:'Basket',
       component:()=>import('../views/Basket.vue')
+    },
+    {
+      path:'/pizza/:id',
+      name:'pizza',
+      component:()=>import('../views/PizzaFull.vue')
     }
+
   
 
   ]

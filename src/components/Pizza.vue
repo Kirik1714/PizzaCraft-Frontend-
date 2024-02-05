@@ -4,6 +4,8 @@ import { usePizzaStore } from '../stores/PizzaStore'
 import { useBasketStore } from '../stores/BasketStore';
 
 const basketStore = useBasketStore();
+const addedMessage = ref('');
+
 const props = defineProps({
   pizza: Object
 
@@ -24,8 +26,6 @@ const crustTypesInProdunction = crustTypes.value.map(crustType => {
 
   }
 })
-
-
 
 
 const pizzaSizes = ref([
@@ -55,40 +55,61 @@ const changePizzaSize = (id) => {
 const calcPrice = computed(() => {
   return props.pizza.price * activeCurstSize.value
 })
+const addToBasket = (object) => {
+  basketStore.addToBasket(object);
+  addedMessage.value = 'Добавлено';
+
+  setTimeout(() => {
+    addedMessage.value = '';
+  }, 500);
+};
+
+
 
 </script>
 
 <template>
+  
   <div class="container">
-    <div class="container_img"><img :src="props.pizza.image_url" alt=""></div>
-    <div class="container_title">{{ props.pizza.name }}</div>
-    <div class="container_pizza_options">
-      <div class="pizza_option types">
-        <div v-for="crustType in crustTypesInProdunction" :key="crustType.id"
-          :class="{ 'active': activeCurstType === crustType.id ? true : '', 'btn_type': true, 'btn_disabled': !crustType.isInProduction }"
-          @click="changeCrustTypes(crustType.id)">
-          {{ crustType.name }}
+      <RouterLink :to="{ name: 'pizza', params: { id: props.pizza.id }}" >
+      <div class="container_img"><img :src="props.pizza.image_url" alt=""></div>
+      <div class="container_title">{{ props.pizza.name }}</div>
+      <div class="container_pizza_options">
+        <div class="pizza_option types">
+          <div v-for="crustType in crustTypesInProdunction" :key="crustType.id"
+            :class="{ 'active': activeCurstType === crustType.id ? true : '', 'btn_type': true, 'btn_disabled': !crustType.isInProduction }"
+            @click.prevent="changeCrustTypes(crustType.id)">
+            {{ crustType.name }}
+          </div>
+        </div>
+  
+        <div class="pizza_option size">
+          <div v-for="size in pizzaSizesInProduction" :key="size.id"
+            :class="{ 'active': activeCurstSize === size.id ? true : '', 'btn_type': true, 'btn_disabled': !size.isInProduction }"
+            @click.prevent="changePizzaSize(size.id)">
+            {{ size.diameter }} см
+          </div>
         </div>
       </div>
-
-      <div class="pizza_option size">
-        <div v-for="size in pizzaSizesInProduction" :key="size.id"
-          :class="{ 'active': activeCurstSize === size.id ? true : '', 'btn_type': true, 'btn_disabled': !size.isInProduction }"
-          @click="changePizzaSize(size.id)">
-          {{ size.diameter }} см
+      <div class="container_pizza_price_add">
+        <div class="pizza_price">от {{ calcPrice }} $</div>
+        <div class="pizza_add "
+          @click.prevent="addToBasket({ id: props.pizza.id, name: props.pizza.name, img_url: props.pizza.image_url, crust_type: crustTypes[activeCurstType - 1], crust_diameter: pizzaSizes[activeCurstSize - 1], price: calcPrice })">
+          <img src="../assets/images/add.svg" alt=""> Добавить
+  
+          <div class="added_message" v-if="addedMessage">{{ addedMessage }}</div>
         </div>
       </div>
+    </RouterLink>
     </div>
-    <div class="container_pizza_price_add">
-      <div class="pizza_price">от {{ calcPrice }} $</div>
-      <div class="pizza_add "  
-        @click.prevent="basketStore.addToBasket({ id: props.pizza.id,name: props.pizza.name, img_url:props.pizza.image_url,crust_type: crustTypes[activeCurstType - 1], crust_diameter: pizzaSizes[activeCurstSize - 1], price: calcPrice })">
-        <img src="../assets/images/add.svg" alt=""> Добавить </div>
-    </div>
-  </div>
+  
 </template>
 
 <style scoped lang="scss">
+a{
+  text-decoration: none;
+  color: inherit;
+}
 .container {
   background-color: #FFFFFF;
   width: 250px;
@@ -98,6 +119,7 @@ const calcPrice = computed(() => {
   flex-direction: column;
   align-items: center;
   padding-top: 35px;
+ 
 
   &_title {
     height: 40px;
@@ -124,7 +146,6 @@ const calcPrice = computed(() => {
 
       .btn_type {
         padding: 10px;
-
         border-radius: 10px;
       }
 
@@ -148,6 +169,7 @@ const calcPrice = computed(() => {
     margin-top: 15px;
     width: 100%;
 
+
     .pizza_add {
       display: flex;
       align-items: center;
@@ -157,15 +179,23 @@ const calcPrice = computed(() => {
       font-size: 14px;
       padding: 11px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+     
 
       &:hover {
-      border: 2px solid rgb(20, 177, 212);  
-
+        border-color: rgb(20, 177, 212);
         background-color: rgb(20, 177, 212);
-        cursor: pointer;
         color: #FFFFFF;
-        animation-duration: 1ms;
-
+      }
+      .added_message{
+        font-size: 20px;
+        font-family: 'Inter';
+        color: #000000;
+        position: absolute;
+        bottom: -30px;
+        left: -3px;
+     
       }
 
       img {
