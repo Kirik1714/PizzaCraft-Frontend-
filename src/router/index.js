@@ -19,7 +19,18 @@ const router = createRouter({
       path:'/pizza/:id',
       name:'pizza',
       component:()=>import('../views/PizzaFull.vue')
-    }
+    },
+  
+    {
+      path:'/login',
+      name:'login',
+      component:()=>import('../views/Login.vue')
+    },
+      {
+      path:'/registration',
+      name:'registration',
+      component:()=>import('../views/Registration.vue')
+    },
 
   
 

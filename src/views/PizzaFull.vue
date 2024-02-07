@@ -24,16 +24,8 @@ const calcPrice = computed(() => {
   return pizzaStore.pizza.price * activeCurstSize.value
 })
 
-
-
 const activeCurstType = ref(null);
 const activeCurstSize = ref(null);
-
-
-
-
-
-
 
 
 const changeCrustTypes = (id) => {

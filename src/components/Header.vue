@@ -1,8 +1,8 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import {useBasketStore} from '../stores/BasketStore';
+import { useBasketStore } from '../stores/BasketStore';
 
-const basketStore=useBasketStore();
+const basketStore = useBasketStore();
 </script>
 
 <template>
@@ -24,11 +24,14 @@ const basketStore=useBasketStore();
                     <div class="user_block_basket">
                         <div class="block_basket_price">{{ basketStore.getTotalPrice }} $</div>
                         <div class="block_basket_split"></div>
-                        <div class="block_basket_img"><img src="../assets/images/basket.svg" alt="">{{ basketStore.countPizza }}</div>
+                        <div class="block_basket_img"><img src="../assets/images/basket.svg" alt="">{{
+                            basketStore.countPizza }}</div>
                     </div>
                 </RouterLink>
                 <div class="user_block_account">
-                    <img src="../assets/images/account.svg" alt="">
+                    <RouterLink to="/login">
+                        <img src="../assets/images/account.svg" alt="">
+                    </RouterLink>
                 </div>
             </div>
         </nav>
@@ -36,7 +39,6 @@ const basketStore=useBasketStore();
 </template>
 
 <style scoped lang="scss">
-
 .nav {
     display: flex;
     justify-content: space-between;
@@ -44,9 +46,12 @@ const basketStore=useBasketStore();
     margin-bottom: 25px;
 
     .custom-link {
-    color: inherit; /* или ваш цвет текста */
-    text-decoration: none; /* убирает подчеркивание, если необходимо */
-}
+        color: inherit;
+        /* или ваш цвет текста */
+        text-decoration: none;
+        /* убирает подчеркивание, если необходимо */
+    }
+
     &_info_block {
         display: flex;
         gap: 17px;
@@ -94,5 +99,4 @@ const basketStore=useBasketStore();
 .block_basket_img {
     display: flex;
     gap: 4px;
-}
-</style>
+}</style>
