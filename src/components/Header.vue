@@ -1,8 +1,24 @@
 <script setup>
+import { onMounted, watch,ref, reactive } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useBasketStore } from '../stores/BasketStore';
+import { useUserStore } from '../stores/UserStore';
 
 const basketStore = useBasketStore();
+const userStore = useUserStore();
+
+
+
+
+onMounted(async () => {
+    
+   await userStore.getUser() 
+    
+})
+
+
+
+
 </script>
 
 <template>
@@ -28,10 +44,13 @@ const basketStore = useBasketStore();
                             basketStore.countPizza }}</div>
                     </div>
                 </RouterLink>
-                <div class="user_block_account">
+                <div class="user_block_account" v-if="!userStore.user?.name " >
                     <RouterLink to="/login">
                         <img src="../assets/images/account.svg" alt="">
                     </RouterLink>
+                </div>
+                <div class="user_block_name" >
+                    {{ userStore.user?.name }}
                 </div>
             </div>
         </nav>
@@ -99,4 +118,5 @@ const basketStore = useBasketStore();
 .block_basket_img {
     display: flex;
     gap: 4px;
-}</style>
+}
+</style>

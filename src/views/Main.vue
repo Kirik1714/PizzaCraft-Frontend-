@@ -10,7 +10,7 @@ import Filter from '../components/Filter.vue';
 import Pizza from '../components/Pizza.vue'
 
 
-
+ 
 const pizzaStore = usePizzaStore();
 const filterStore=useFilterStore();
 

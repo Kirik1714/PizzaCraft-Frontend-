@@ -1,12 +1,21 @@
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useUserStore } from '@/stores/UserStore';
+import Button from 'primevue/button';
+
+
+
+const userStore=useUserStore();
 
 
 const email=ref('');
 const password=ref('');
 
-import Button from 'primevue/button';
+const LoginUser = async (email,password) => {
+    await userStore.loginUser({email,password})
+    await userStore.getUser()
+}
 
 
 
@@ -26,7 +35,7 @@ import Button from 'primevue/button';
             <input type="password"  class="btn" v-model="password" placeholder="Пароль" />
     
     
-            <Button label="Войти" @click="console.log(email.value,password.value)"/>
+         <Button label="Войти" @click.prevent="LoginUser(email,password)"/>
       
             <RouterLink to="/registration">Нет аккаунта?</RouterLink>
         </form>
