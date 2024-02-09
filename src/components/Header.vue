@@ -1,21 +1,60 @@
 <script setup>
-import { onMounted, watch,ref, reactive } from 'vue';
+
+import TieredMenu from 'primevue/tieredmenu';
+import Button from 'primevue/button';
+import { ref, watch ,onMounted} from 'vue';
+import router from '@/router';
 import { RouterLink } from 'vue-router';
 import { useBasketStore } from '../stores/BasketStore';
 import { useUserStore } from '../stores/UserStore';
 
+
 const basketStore = useBasketStore();
 const userStore = useUserStore();
 
-
-
+const localUser=ref({});
+console.log(localUser.value);
 
 onMounted(async () => {
-    
-   await userStore.getUser() 
-    
+  
+    // await userStore.getUser()
+    localUser.value=localStorage.getItem('user')
+    console.log(localUser.value);
+
+})
+watch(localUser.value ,() => {
+    console.log('Токен изменился', localUser.value);
+    localUser.value=JSON.parse(localStorage.getItem('user'))
+
+  
 })
 
+
+const menu = ref();
+const items = ref([
+    {
+        label: 'Заказы',
+        icon: 'pi pi-list',
+        command: () => {
+            // Добавьте здесь логику обработки нажатия на "Заказы"
+            console.log('Обработка нажатия на "Заказы"');
+        }
+    },
+    {
+        label: 'Выход',
+        icon: 'pi pi-sign-out',
+        command: async() => {
+             await userStore.logoutUser();
+             localUser.value = {}
+             router.push('/login'); 
+     
+        }
+    }
+]);
+
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
 
 
 
@@ -44,14 +83,19 @@ onMounted(async () => {
                             basketStore.countPizza }}</div>
                     </div>
                 </RouterLink>
-                <div class="user_block_account" v-if="!userStore.user?.name " >
+                <div class="user_block_account" v-if="!userStore.user?.name">
                     <RouterLink to="/login">
                         <img src="../assets/images/account.svg" alt="">
                     </RouterLink>
                 </div>
-                <div class="user_block_name" >
-                    {{ userStore.user?.name }}
+                <div class="user_block_name" v-else>
+                    <Button type="button" :label="userStore.user?.name" @click="toggle" aria-haspopup="true"
+                        aria-controls="overlay_tmenu" icon="pi pi-user" severity="info" text rounded aria-label="User" />
+
+                        <TieredMenu ref="menu" id="overlay_tmenu" :model="items" popup class="popup" />
+
                 </div>
+
             </div>
         </nav>
     </header>
@@ -66,9 +110,9 @@ onMounted(async () => {
 
     .custom-link {
         color: inherit;
-        /* или ваш цвет текста */
+        
         text-decoration: none;
-        /* убирает подчеркивание, если необходимо */
+       
     }
 
     &_info_block {
@@ -82,6 +126,13 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     gap: 15px;
+
+    .user_block_name{
+
+        .popup{
+            margin-top:20px ;
+        }
+    }
 
 }
 

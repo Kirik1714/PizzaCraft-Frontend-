@@ -44,6 +44,24 @@ export const useUserStore = defineStore("user", () => {
       console.log('Не удалось получить пользователя', error);
     }
   };
+  const logoutUser=async()=>{
+    try {
+      const { data } = await api.post("http://localhost:8000/api/auth/logout");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+      user.value = {};
+      
+    } catch (error) {
+      console.log('Не удалось выйти', error);
+      
+    }
+  }
+  watch(user, (state) => {
+    localStorage.setItem("user", JSON.stringify(state));
+  }, {
+    deep: true
+  }
+  )
 
-  return { user, createUser, loginUser, getUser };
+  return { user, createUser, loginUser, getUser,logoutUser };
 });

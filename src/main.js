@@ -1,9 +1,9 @@
 import './assets/main.scss'
 import './assets/reset.css'
+import 'primeicons/primeicons.css'
 
- import 'primevue/resources/themes/aura-light-blue/theme.css'
 
-
+import 'primevue/resources/themes/aura-light-blue/theme.css'
 
 
 import PrimeVue from 'primevue/config';
