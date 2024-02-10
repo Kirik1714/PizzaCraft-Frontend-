@@ -35,7 +35,7 @@ const LoginUser = async (email,password) => {
             <input type="password"  class="btn" v-model="password" placeholder="Пароль" />
     
     
-         <Button label="Войти" @click.prevent="LoginUser(email,password)"/>
+          <Button label="Войти" @click.prevent="LoginUser(email,password)"/>
       
             <RouterLink to="/registration">Нет аккаунта?</RouterLink>
         </form>

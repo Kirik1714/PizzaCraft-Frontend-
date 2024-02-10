@@ -7,6 +7,12 @@ import api from "@/api";
 export const useUserStore = defineStore("user", () => {
   const user = ref({});
 
+  const userInLocalStorage = localStorage.getItem('user');
+  if (userInLocalStorage !== null) {
+    user.value = JSON.parse(userInLocalStorage);
+  }
+  
+
   const createUser = async (object) => {
     try {
       const { data } = await api.post("http://localhost:8000/api/users", object);
@@ -24,6 +30,7 @@ export const useUserStore = defineStore("user", () => {
       });
 
       localStorage.setItem("access_token", data.access_token);
+      getUser();
       router.push({ name: "Main" });
     } catch (error) {
       console.log("Не получилось авторизоваться", error);
@@ -44,6 +51,24 @@ export const useUserStore = defineStore("user", () => {
       console.log('Не удалось получить пользователя', error);
     }
   };
+  const logoutUser=async()=>{
+    try {
+      const { data } = await api.post("http://localhost:8000/api/auth/logout");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
 
-  return { user, createUser, loginUser, getUser };
+      
+    } catch (error) {
+      console.log('Не удалось выйти', error);
+      
+    }
+  }
+  watch(user, (state) => {
+    localStorage.setItem("user", JSON.stringify(state));
+  }, {
+    deep: true
+  }
+  )
+
+  return { user, createUser, loginUser, getUser,logoutUser,userInLocalStorage };
 });

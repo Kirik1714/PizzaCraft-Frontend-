@@ -68,6 +68,7 @@ export const useBasketStore = defineStore("basket", () => {
   },{
     deep:true
   })
+  
   return {
     pizzazInBasket,
     addToBasket,
