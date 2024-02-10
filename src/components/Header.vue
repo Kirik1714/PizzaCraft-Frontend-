@@ -2,7 +2,7 @@
 
 import TieredMenu from 'primevue/tieredmenu';
 import Button from 'primevue/button';
-import { ref, watch ,onMounted} from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import router from '@/router';
 import { RouterLink } from 'vue-router';
 import { useBasketStore } from '../stores/BasketStore';
@@ -15,16 +15,16 @@ const userStore = useUserStore();
 
 
 onMounted(() => {
-    console.log('userStore.user',userStore.user)
-    console.log('userStore.user',userStore.userInLocalStorage)
+    console.log('userStore.user', userStore.user)
+    console.log('userStore.user', userStore.userInLocalStorage)
 
 }
 )
-const localUser=ref({});
+const localUser = ref({});
 console.log(localUser.value);
 
 // onMounted(async () => {
-  
+
 //     // await userStore.getUser()
 //     localUser.value=localStorage.getItem('user')
 //     console.log(localUser.value);
@@ -34,7 +34,7 @@ console.log(localUser.value);
 //     console.log('Токен изменился', localUser.value);
 //     localUser.value=JSON.parse(localStorage.getItem('user'))
 
-  
+
 
 // })
 
@@ -52,11 +52,11 @@ const items = ref([
     {
         label: 'Выход',
         icon: 'pi pi-sign-out',
-        command: async() => {
-             await userStore.logoutUser();
+        command: async () => {
+            await userStore.logoutUser();
 
-             router.push('/login'); 
-     
+            router.push('/login');
+
         }
     }
 ]);
@@ -95,25 +95,22 @@ const toggle = (event) => {
 
                 <div class="user_block_account" v-if="!Object.keys(userStore.user).length">
 
-                <div class="user_block_account" v-if="!userStore.user?.name">
+
 
                     <RouterLink to="/login">
                         <img src="../assets/images/account.svg" alt="">
                     </RouterLink>
+
+
+
                 </div>
                 <div class="user_block_name" v-else>
-
                     <Button type="button" :label="userStore.user.name" @click="toggle" aria-haspopup="true"
-
-
                         aria-controls="overlay_tmenu" icon="pi pi-user" severity="info" text rounded aria-label="User" />
 
-                        <TieredMenu ref="menu" id="overlay_tmenu" :model="items" popup class="popup" />
-
+                    <TieredMenu ref="menu" id="overlay_tmenu" :model="items" popup class="popup" />
                 </div>
                 </div>
-
-            </div>
         </nav>
     </header>
 </template>
@@ -127,9 +124,9 @@ const toggle = (event) => {
 
     .custom-link {
         color: inherit;
-        
+
         text-decoration: none;
-       
+
     }
 
     &_info_block {
@@ -144,10 +141,10 @@ const toggle = (event) => {
     align-items: center;
     gap: 15px;
 
-    .user_block_name{
+    .user_block_name {
 
-        .popup{
-            margin-top:20px ;
+        .popup {
+            margin-top: 20px;
         }
     }
 
