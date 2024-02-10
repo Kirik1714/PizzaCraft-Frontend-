@@ -56,6 +56,7 @@ export const useUserStore = defineStore("user", () => {
       const { data } = await api.post("http://localhost:8000/api/auth/logout");
       localStorage.removeItem("access_token");
       localStorage.removeItem("user");
+      user.value = {};
 
       
     } catch (error) {
