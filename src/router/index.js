@@ -32,18 +32,16 @@ const router = createRouter({
   ],
 });
 
-// router.beforeEach((to, from, next) => {
-//   const access_token = localStorage.getItem("access_token");
-//   if (!access_token) {
-//     if (to.name !== "Login" && to.name !== "Registration") {
-//       return next({ name: "Login" });
-//     }
-//   }
-//   if (to.name === "Login") {
-//     next({ name: "Main" });
-//   }
+router.beforeEach((to, from, next) => {
+  const access_token = localStorage.getItem("access_token");
+  if(access_token){
+    if(to.name ==="Login" ||to.name ==="Registration" ){
+      return next({ name: "Main" })
+    }
+  }
+ 
 
-//   next();
-// });
+  next();
+});
 
 export default router;

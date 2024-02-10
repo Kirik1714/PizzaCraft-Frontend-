@@ -23,20 +23,6 @@ onMounted(() => {
 const localUser = ref({});
 console.log(localUser.value);
 
-// onMounted(async () => {
-
-//     // await userStore.getUser()
-//     localUser.value=localStorage.getItem('user')
-//     console.log(localUser.value);
-
-// })
-// watch(localUser.value ,() => {
-//     console.log('Токен изменился', localUser.value);
-//     localUser.value=JSON.parse(localStorage.getItem('user'))
-
-
-
-// })
 
 
 const menu = ref();
@@ -45,7 +31,7 @@ const items = ref([
         label: 'Заказы',
         icon: 'pi pi-list',
         command: () => {
-            // Добавьте здесь логику обработки нажатия на "Заказы"
+           
             console.log('Обработка нажатия на "Заказы"');
         }
     },
@@ -55,7 +41,7 @@ const items = ref([
         command: async () => {
             await userStore.logoutUser();
 
-            router.push('/login');
+         
 
         }
     }
