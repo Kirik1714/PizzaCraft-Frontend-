@@ -2,11 +2,12 @@
 
 import TieredMenu from 'primevue/tieredmenu';
 import Button from 'primevue/button';
-import { ref, watch, onMounted } from 'vue';
-import router from '@/router';
+import { ref } from 'vue';
+
 import { RouterLink } from 'vue-router';
 import { useBasketStore } from '../stores/BasketStore';
 import { useUserStore } from '../stores/UserStore';
+import router from '@/router';
 
 
 const basketStore = useBasketStore();
@@ -14,14 +15,7 @@ const userStore = useUserStore();
 
 
 
-onMounted(() => {
-    console.log('userStore.user', userStore.user)
-    console.log('userStore.user', userStore.userInLocalStorage)
 
-}
-)
-const localUser = ref({});
-console.log(localUser.value);
 
 
 
@@ -32,7 +26,7 @@ const items = ref([
         icon: 'pi pi-list',
         command: () => {
            
-            console.log('Обработка нажатия на "Заказы"');
+            router.push({name:"Orders"})
         }
     },
     {

@@ -1,24 +1,37 @@
 <script setup>
 import CartBasket from '@/components/CartBasket.vue';
 import EmptyBasket from '@/components/EmptyBasket.vue';
-import {useBasketStore} from '../stores/BasketStore';
+import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
+import { useBasketStore } from '../stores/BasketStore';
+import { useUserStore } from '@/stores/UserStore';
 
-const basketStore=useBasketStore();
+const basketStore = useBasketStore();
+const userStore = useUserStore();
+
+
+const order = {
+    'user_id': userStore.user.id,
+    'pizzaz': JSON.stringify(basketStore.pizzazInBasket),
+};
+
+const access_token=localStorage.getItem('access_token')
+
 
 </script>
 
 <template>
     <div class="container">
-        <div class="" v-if="basketStore.pizzazInBasket.length===0">
-            <EmptyBasket  />
+        <div class="" v-if="basketStore.pizzazInBasket.length === 0">
+            <EmptyBasket />
         </div>
         <div class="" v-else>
 
-            <div class="container_basket_header" >
+            <div class="container_basket_header">
                 <div class="header_basket_title">
                     <img src="../assets/images/basketCart.svg" alt="">
                     <div class="title">Корзина</div>
-    
+
                 </div>
                 <div class="header_basket_clear" @click="basketStore.clearBasket()">
                     <img src="../assets/images/trash.svg" alt="">
@@ -26,23 +39,31 @@ const basketStore=useBasketStore();
                 </div>
             </div>
             <div class="container_basket_main">
-                <CartBasket  v-for="pizza in basketStore.pizzazInBasket" :key="pizza.id" :pizza="pizza"/>
-              
-    
+                <CartBasket v-for="pizza in basketStore.pizzazInBasket" :key="pizza.id" :pizza="pizza" />
+
+
             </div>
             <div class="container_basket_footer">
                 <div class="pizza_order_info">
                     <div class="count">Всего пицц: <span class="count_number">{{ basketStore.countPizza }} шт.</span> </div>
-                    <div class="price">Сумма заказа: <span class="price_number">{{ basketStore.getTotalPrice }} $</span></div>
-    
+                    <div class="price">Сумма заказа: <span class="price_number">{{ basketStore.getTotalPrice }} $</span>
+                    </div>
+
                 </div>
                 <div class="pizza_button_order">
                     <div class="button_back btn">
                         <img src="../assets/images/back.svg" alt="">
                         <div class="button_back_text">Вернуться назад</div>
                     </div>
-                    <div class="button_order btn">
-                        <div class="button_order_text ">Оформить заказ</div>
+                    <div class="button_order btn" v-if="access_token">
+                        <div class="button_order_text" @click="userStore.createOrder(order)">Оформить заказ</div>
+                    </div>
+                    <div class="button_order btn" v-else>
+
+                        <RouterLink :to="{'name':'Login'}">
+                            <div class="button_order_text" >Оформить заказ</div>
+
+                        </RouterLink>
                     </div>
                 </div>
             </div>
@@ -128,16 +149,27 @@ const basketStore=useBasketStore();
             align-items: center;
             justify-content: space-between;
 
+
             .button_back {
                 display: flex;
                 gap: 10px;
                 color: #B6B6B6;
             }
-            .button_order{
+
+            .button_order {
                 background-color: rgb(8, 161, 196);
                 color: #FFFFFF;
             }
         }
+
+        .disable {
+            pointer-events: none;
+
+        }
+    }
+    a{
+        text-decoration: none;
+        color: #FFFFFF;
     }
 
     .btn {

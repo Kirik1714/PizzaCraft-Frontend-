@@ -29,6 +29,17 @@ const router = createRouter({
       name: "Registration",
       component: () => import("../views/Registration.vue"),
     },
+    {
+      path: "/orders",
+      name: "Orders",
+      component: () => import("../views/Order.vue"),
+
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: () => import("../views/Main.vue"),
+    }
   ],
 });
 
@@ -36,6 +47,11 @@ router.beforeEach((to, from, next) => {
   const access_token = localStorage.getItem("access_token");
   if(access_token){
     if(to.name ==="Login" ||to.name ==="Registration" ){
+      return next({ name: "Main" })
+    }
+  }
+  if(!access_token){
+    if(to.name ==="Orders"){
       return next({ name: "Main" })
     }
   }

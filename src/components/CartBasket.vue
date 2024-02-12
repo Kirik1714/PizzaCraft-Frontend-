@@ -6,7 +6,7 @@ const props = defineProps({
     pizza: Object,
 
 })
-console.log(props.pizza)
+
 </script>
 
 <template>

@@ -1,7 +1,8 @@
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch ,toRefs} from 'vue';
 import { useUserStore } from '@/stores/UserStore';
+import InlineMessage from 'primevue/inlinemessage';
 import Button from 'primevue/button';
 
 
@@ -14,12 +15,14 @@ const password=ref('');
 
 const LoginUser = async (email,password) => {
     await userStore.loginUser({email,password})
-    await userStore.getUser()
+
 }
 
 
 
-
+watch(userStore.error, () => {
+    console.log(userStore.error);
+})
 </script>
 
 
@@ -36,6 +39,7 @@ const LoginUser = async (email,password) => {
     
     
           <Button label="Войти" @click.prevent="LoginUser(email,password)"/>
+          <InlineMessage severity="error" v-if="Object.keys(userStore.error).length">{{userStore.error.error}}</InlineMessage>
       
             <RouterLink to="/registration">Нет аккаунта?</RouterLink>
         </form>
