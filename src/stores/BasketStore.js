@@ -60,7 +60,7 @@ export const useBasketStore = defineStore("basket", () => {
     return pizzazInBasket.value?.reduce(
       (acc, item) => acc + item.count * item.price,
       0
-    );
+    ).toFixed(2);
   });
   watch(pizzazInBasket,(state)=>{
 
