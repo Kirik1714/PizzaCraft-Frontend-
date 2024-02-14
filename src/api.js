@@ -39,9 +39,7 @@ api.interceptors.response.use(
     }
 
 
-    // if (error.response.status === 401) {
-    //   router.replace({ name: "Login" });
-    // }
+   
     return Promise.reject(error);
   }
 );

@@ -5,20 +5,20 @@ import { defineStore } from "pinia";
 export const useFilterStore = defineStore("filter", {
   state: () => ({
     filters: [
-      { id: 1, name: "Мясная" },
-      { id: 2, name: "Вегетарианская" },
-      { id: 3, name: "Морская" },
-      { id: 4, name: "Острая" },
-      { id: 5, name: "Белая" },
-      { id: 6, name: "По сезону" },
-      { id: 7, name: "Сладкая" },
-      { id: 8, name: "Все" },
+      { id: 1, name: "Все" },
+      { id: 2, name: "Острая" },
+      { id: 3, name: "Вегетарианская" },
+      { id: 4, name: "Сладкая" },
+      { id: 5, name: "Морская" },
+      { id: 6, name: "Белая" },
+      { id: 7, name: "Мясная" },
+    
     ],
     sortItems: [
-      { id: 1, name: "Возрастанию", code: "asc" },
+      { id: 1, name: "Возрастанию", code: "asc" }, 
       { id: 2, name: "Убыванию", code: "desc" },
     ],
-    selectedFilter:[8],
+    selectedFilter:[1],
     selectedSorted:null,
   }),
   actions: {

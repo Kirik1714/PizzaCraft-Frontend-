@@ -26,7 +26,7 @@ const items = ref([
         icon: 'pi pi-list',
         command: () => {
            
-            router.push({name:"Orders"})
+            router.push({name:"Orders",params:{id:userStore.user.id}})
         }
     },
     {

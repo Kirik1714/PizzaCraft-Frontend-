@@ -1,6 +1,8 @@
 import { ref, computed, watch } from "vue";
+import { useBasketStore } from "./BasketStore";
 import { defineStore } from "pinia";
 import router from "@/router";
+
 
 import api from "@/api";
 import axios from "axios";
@@ -8,6 +10,9 @@ import axios from "axios";
 export const useUserStore = defineStore("user", () => {
   const user = ref({});
   const error = ref({});
+  const orders = ref({});
+  const basketStore = useBasketStore();
+  
   const userInLocalStorage = localStorage.getItem('user');
   
   if (userInLocalStorage !== null) {
@@ -65,14 +70,31 @@ export const useUserStore = defineStore("user", () => {
       console.log('Не удалось выйти', error);
     }
   };
-  const createOrder=async(object)=>{
-    console.log(object);
+  const createOrder=async()=>{
+    console.log(basketStore.pizzazInBasket);
+    const object={
+      'user_id': user.value.id,
+      'pizzaz': localStorage.getItem('pizzazInBasket'),
+      'total_price': basketStore.getTotalPrice
+    }
+ 
     try {
-      const {data}=await axios.post('http://localhost:8000/api/orders',object)
-      console.log(data);
+      const {data}=await axios.post('http://localhost:8000/api/pizza/orders',object)
+      localStorage.removeItem('pizzazInBasket');
+      basketStore.pizzazInBasket=[]
+      router.push({name:'Orders',params:{id:user.value.id}})
+   
       
     } catch (error) {
       console.log('Не удалось создать заказ', error);
+    }
+  }
+  const getOrders=async(id)=>{
+    try {
+      const {data}=await axios.get(`http://localhost:8000/api/pizza/orders/${id}`)
+      orders.value=data
+    }catch (error) {
+      console.log('Не удалось получить заказ', error);
     }
   }
 
@@ -82,5 +104,5 @@ export const useUserStore = defineStore("user", () => {
     deep: true
   });
 
-  return { user, error, createUser, loginUser, getUser, logoutUser, userInLocalStorage,createOrder };
+  return { user,orders, error, createUser, loginUser, getUser, logoutUser, userInLocalStorage,createOrder,getOrders };
 });

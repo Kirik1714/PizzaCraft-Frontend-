@@ -9,15 +9,20 @@ import { useUserStore } from '@/stores/UserStore';
 const basketStore = useBasketStore();
 const userStore = useUserStore();
 
-
-const order = {
+ 
+const order = ref({
     'user_id': userStore.user.id,
     'pizzaz': JSON.stringify(basketStore.pizzazInBasket),
-};
+    'total_price': basketStore.getTotalPrice
+});
 
 const access_token=localStorage.getItem('access_token')
 
 
+// const test=()=>{
+//     console.log('Order:', order.value);
+//     console.log('Pizzaz in Basket:', basketStore.pizzazInBasket);
+// }
 </script>
 
 <template>
@@ -55,8 +60,8 @@ const access_token=localStorage.getItem('access_token')
                         <img src="../assets/images/back.svg" alt="">
                         <div class="button_back_text">Вернуться назад</div>
                     </div>
-                    <div class="button_order btn" v-if="access_token">
-                        <div class="button_order_text" @click="userStore.createOrder(order)">Оформить заказ</div>
+                    <div class="button_order btn" v-if="access_token" @click="userStore.createOrder()">
+                        <div class="button_order_text" >Оформить заказ</div>
                     </div>
                     <div class="button_order btn" v-else>
 
