@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Dropdown from 'primevue/dropdown';
 import { ref,  toRefs,  watch } from "vue";
 import {useFilterStore} from '../stores/FilterStore'

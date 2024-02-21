@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts" >
 import { ref, defineProps, computed } from "vue";
 import { usePizzaStore } from '../stores/PizzaStore'
 import { useBasketStore } from '../stores/BasketStore';
@@ -44,11 +44,11 @@ const pizzaSizesInProduction = pizzaSizes.value.map(pizzaSize => {
   };
 });
 
-const changeCrustTypes = (id) => {
+const changeCrustTypes = (id: number ) => {
   activeCurstType.value = id
 }
 
-const changePizzaSize = (id) => {
+const changePizzaSize = (id : number) => {
   activeCurstSize.value = id
 }
 
