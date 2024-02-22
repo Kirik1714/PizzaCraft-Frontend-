@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 
 import TieredMenu from 'primevue/tieredmenu';
 import Button from 'primevue/button';
@@ -12,11 +12,6 @@ import router from '@/router';
 
 const basketStore = useBasketStore();
 const userStore = useUserStore();
-
-
-
-
-
 
 
 const menu = ref();

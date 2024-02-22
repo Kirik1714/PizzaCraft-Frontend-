@@ -1,8 +1,54 @@
-import { ref, computed,watch } from "vue";
+import { ref, computed,watch,Ref } from "vue";
 import { defineStore } from "pinia";
 
+interface CrustDiameter {
+  id: number;
+  diameter: number;
+  created_at?: string | null;
+  updated_at?: string | null;
+  pivot?: {
+    pizza_id: number;
+    crust_diameter_id: number;
+  };
+}
+
+
+interface CrustType {
+  id: number;
+  name: string;
+  created_at?: string | null;
+  updated_at?: string | null;
+  pivot?: {
+    pizza_id: number;
+    crust_type_id: number;
+  };
+}
+
+interface IPizza {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  crust_diameter: CrustDiameter; 
+  crust_type: CrustType;
+  image_url: string;
+  is_visible: number;
+  created_at: string;
+  updated_at: string;
+  count: number;
+}
+interface BasketStore {
+  pizzazInBasket: Ref<IPizza[]>;
+  addToBasket: (object: IPizza) => void;
+  minusItemFromBasket: (object: IPizza) => void;
+  removeFromBasket: (object: IPizza) => void;
+  clearBasket: () => void;
+  countPizza: Ref<number>;
+  getTotalPrice: Ref<string>;
+}
+
 export const useBasketStore = defineStore("basket", () => {
-  const pizzazInBasket = ref([]);
+  const pizzazInBasket = ref<IPizza[]>([]);
 
 
   const pizzaInLocalStorage = localStorage.getItem('pizzazInBasket');
@@ -12,9 +58,9 @@ export const useBasketStore = defineStore("basket", () => {
   
   
 
-  const addToBasket = (object) => {
+  const addToBasket = (object:IPizza ):void => {
     const existingPizza = pizzazInBasket.value.find(
-      (pizza) =>
+      (pizza:IPizza) =>
         pizza.id === object.id &&
         pizza.crust_diameter.diameter === object.crust_diameter.diameter &&
         pizza.crust_type.name === object.crust_type.name
@@ -26,7 +72,7 @@ export const useBasketStore = defineStore("basket", () => {
       existingPizza.count++;
     }
   };
-  const minusItemFromBasket = (object) => {
+  const minusItemFromBasket = (object: IPizza):void => {
     const existingPizza = pizzazInBasket.value.find(
       (pizza) => pizza.id === object.id
     );
@@ -38,7 +84,7 @@ export const useBasketStore = defineStore("basket", () => {
       }
     }
   };
-  const removeFromBasket = (object) => {
+  const removeFromBasket = (object: IPizza):void => {
     const indexToRemove = pizzazInBasket.value.findIndex(
       (pizza) =>
         pizza.id === object.id &&
@@ -57,10 +103,14 @@ export const useBasketStore = defineStore("basket", () => {
     return pizzazInBasket.value?.reduce((acc, item) => acc + item.count, 0);
   });
   const getTotalPrice = computed(() => {
-    return pizzazInBasket.value?.reduce(
+  
+    const totalPrice = pizzazInBasket.value?.reduce(
       (acc, item) => acc + item.count * item.price,
       0
-    ).toFixed(2);
+    );
+    
+
+  return totalPrice !== undefined ? totalPrice.toFixed(2) : '0.00';
   });
   watch(pizzazInBasket,(state)=>{
 

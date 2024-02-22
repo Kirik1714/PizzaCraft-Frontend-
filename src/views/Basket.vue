@@ -1,4 +1,4 @@
-<script setup>
+<script setup >
 import CartBasket from '@/components/CartBasket.vue';
 import EmptyBasket from '@/components/EmptyBasket.vue';
 import { ref } from 'vue';
@@ -19,10 +19,6 @@ const order = ref({
 const access_token=localStorage.getItem('access_token')
 
 
-// const test=()=>{
-//     console.log('Order:', order.value);
-//     console.log('Pizzaz in Basket:', basketStore.pizzazInBasket);
-// }
 </script>
 
 <template>

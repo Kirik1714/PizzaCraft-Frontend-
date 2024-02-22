@@ -46,12 +46,14 @@ interface SortItem {
   code: string;
 }
 
+
+
 export const usePizzaStore = defineStore("pizza", {
   state: () => ({
     pizzaz: [] as IPizza[],
-    pizza: [],
-    isLoadingPizza: true,
-    totalCountPizzas: null,
+    pizza: [] as IPizza[],
+    isLoadingPizza: true as boolean,
+    totalCountPizzas: null as number | null,
   }),
   actions: {
     async getPizzas(selectedFilter:any, selectedSorted: Ref<SortItem | null>, page: Ref<number>) {
