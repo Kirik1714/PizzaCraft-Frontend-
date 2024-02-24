@@ -6,11 +6,11 @@ import { defineStore ,} from "pinia";
 interface CrustDiameter {
   id: number;
   diameter: number;
-  created_at: string | null;
-  updated_at: string | null;
-  pivot: {
-    pizza_id: number;
-    crust_diameter_id: number;
+  created_at?: string | null;
+  updated_at?: string | null;
+  pivot?: {
+    pizza_id?: number;
+    crust_diameter_id?: number;
   };
 }
 
@@ -18,11 +18,11 @@ interface CrustDiameter {
 interface CrustType {
   id: number;
   name: string;
-  created_at: string | null;
-  updated_at: string | null;
-  pivot: {
-    pizza_id: number;
-    crust_type_id: number;
+  created_at?: string | null;
+  updated_at?: string | null;
+  pivot?: {
+    pizza_id?: number;
+    crust_type_id?: number;
   };
 }
 
@@ -30,7 +30,7 @@ interface IPizza {
   id: number;
   name: string;
   description: string;
-  price: string;
+  price: number;
   crust_diameter: CrustDiameter; 
   crust_type: CrustType;
   image_url: string;
@@ -50,8 +50,8 @@ interface SortItem {
 
 export const usePizzaStore = defineStore("pizza", {
   state: () => ({
-    pizzaz: [] as IPizza[],
-    pizza: [] as IPizza[],
+    pizzaz:[] as IPizza[],
+    pizza:{} as IPizza,
     isLoadingPizza: true as boolean,
     totalCountPizzas: null as number | null,
   }),
@@ -75,7 +75,7 @@ export const usePizzaStore = defineStore("pizza", {
     },
     async getPizza(id: number) {
       try {
-        const { data } = await axios.get(`http://localhost:8000/api/pizza/${id}`);
+        const { data } = await axios.get<IPizza>(`http://localhost:8000/api/pizza/${id}`);
 
         this.pizza = data;
 
@@ -84,4 +84,6 @@ export const usePizzaStore = defineStore("pizza", {
       }
     },
   },
+ 
+ 
 });

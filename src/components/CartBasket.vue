@@ -1,9 +1,48 @@
-<script setup>
+<script setup lang="ts">
 import { useBasketStore } from '../stores/BasketStore';
-import { defineProps } from 'vue';
+import { defineProps, PropType } from 'vue';
 const basketStore = useBasketStore();
+
+interface CrustDiameter {
+  id: number;
+  diameter: number;
+  created_at: string | null;
+  updated_at: string | null;
+  pivot: {
+    pizza_id: number;
+    crust_diameter_id: number;
+  };
+}
+
+
+interface CrustType {
+  id: number;
+  name: string;
+  created_at: string | null;
+  updated_at: string | null;
+  pivot: {
+    pizza_id: number;
+    crust_type_id: number;
+  };
+}
+interface IPizza {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    crust_diameter: CrustDiameter; 
+    crust_type: CrustType;
+    image_url: string;
+    is_visible: number;
+    created_at: string;
+    updated_at: string;
+    count: number;
+  
+}
+
+
 const props = defineProps({
-    pizza: Object,
+    pizza: Object  as PropType<IPizza>,
 
 })
 
@@ -15,28 +54,28 @@ const props = defineProps({
             <div class="main_pizza_info">
                 <div class="pizza_content">
 
-                    <div class="pizza_img"><img :src="props.pizza.img_url" alt="" class="miniPizza"></div>
+                    <div class="pizza_img"><img :src="props.pizza?.image_url" alt="" class="miniPizza"></div>
                     <div class="pizza_description">
-                        <div class="pizza_name">{{ props.pizza.name }}</div>
+                        <div class="pizza_name">{{ props.pizza?.name }}</div>
                         <div class="pizza_crust">
-                            <div class="crust_type">{{ props.pizza.crust_type.name }}</div>
-                            <div class="crust_diametor"> {{ props.pizza.crust_diameter.diameter }} см</div>
+                            <div class="crust_type">{{ props.pizza?.crust_type.name }}</div>
+                            <div class="crust_diametor"> {{ props.pizza?.crust_diameter.diameter }} см</div>
 
                         </div>
 
                     </div>
                 </div>
                 <div class="pizza_buttons_count">
-                    <div class="button_minus " @click.prevent="basketStore.minusItemFromBasket(props.pizza)"><img
-                            src="../assets/images/minus.svg" :class="{'btn':true,'btn_disable':props.pizza.count===1}" alt=""></div>
-                    <div class="count">{{ props.pizza.count }}</div>
-                    <div class="button_plus " @click.prevent="basketStore.addToBasket(props.pizza)"><img
+                    <div class="button_minus " @click.prevent=" props.pizza && basketStore.minusItemFromBasket(props.pizza )"><img
+                            src="../assets/images/minus.svg" :class="{'btn':true,'btn_disable':props.pizza?.count===1}" alt=""></div>
+                    <div class="count">{{ props.pizza?.count }}</div>
+                    <div class="button_plus " @click.prevent=" props.pizza && basketStore.addToBasket(props.pizza)"><img
                             src="../assets/images/add.svg" class="btn" alt=""></div>
                 </div>
                 <div class="pizza_price">
-                    {{ props.pizza.price }} $
+                    {{ props.pizza?.price }} $
                 </div>
-                <div class="pizza_delete" @click.prevent="basketStore.removeFromBasket(props.pizza)">
+                <div class="pizza_delete" @click.prevent=" props.pizza && basketStore.removeFromBasket(props.pizza)">
                     <img src="../assets/images/delete.svg" alt="">
                 </div>
 

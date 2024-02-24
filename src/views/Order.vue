@@ -1,15 +1,19 @@
-<script setup>
-import { onMounted } from 'vue';
-import { useUserStore } from '@/stores/UserStore';
+<script setup lang="ts">
+import { onMounted ,ref} from 'vue';
+import { useUserStore } from '../stores/UserStore';
 import { useRoute } from 'vue-router';
-import CartInOrder from '@/components/CartInOrder.vue';
+import CartInOrder from '../components/CartInOrder.vue';
 
 const userStore = useUserStore();
 const route = useRoute();
 
+const orderId = ref<number | null>(null);
+
 onMounted(()=>{
-    console.log(route.params.id);
-    userStore.getOrders(route.params.id)
+  
+  const id: number = +route.params.id;
+  
+  userStore.getOrders(id);
 })
 </script>
 

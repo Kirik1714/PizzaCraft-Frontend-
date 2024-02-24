@@ -1,7 +1,7 @@
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch ,toRefs} from 'vue';
-import { useUserStore } from '@/stores/UserStore';
+import { useUserStore } from '../stores/UserStore';
 import InlineMessage from 'primevue/inlinemessage';
 import Button from 'primevue/button';
 
@@ -13,7 +13,7 @@ const userStore=useUserStore();
 const email=ref('');
 const password=ref('');
 
-const LoginUser = async (email,password) => {
+const LoginUser = async (email:string,password:string) => {
     await userStore.loginUser({email,password})
 
 }

@@ -7,7 +7,7 @@ import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useBasketStore } from '../stores/BasketStore';
 import { useUserStore } from '../stores/UserStore';
-import router from '@/router';
+import router from '../router';
 
 
 const basketStore = useBasketStore();
@@ -20,8 +20,8 @@ const items = ref([
         label: 'Заказы',
         icon: 'pi pi-list',
         command: () => {
-           
-            router.push({name:"Orders",params:{id:userStore.user.id}})
+
+            router.push({ name: "Orders", params: { id: userStore.user?.id } })
         }
     },
     {
@@ -30,13 +30,13 @@ const items = ref([
         command: async () => {
             await userStore.logoutUser();
 
-         
+
 
         }
     }
 ]);
 
-const toggle = (event) => {
+const toggle = (event: Event) => {
     menu.value.toggle(event);
 };
 
@@ -68,24 +68,19 @@ const toggle = (event) => {
                     </div>
                 </RouterLink>
 
-                <div class="user_block_account" v-if="!Object.keys(userStore.user).length">
-
-
-
+                <div class="user_block_account" v-if="!userStore.user">
+                    <!-- Пользователь не авторизован -->
                     <RouterLink to="/login">
                         <img src="../assets/images/account.svg" alt="">
                     </RouterLink>
-
-
-
                 </div>
-                <div class="user_block_name" v-else>
+                <div class="user_block_account" v-else>
+                    <!-- Пользователь авторизован -->
                     <Button type="button" :label="userStore.user.name" @click="toggle" aria-haspopup="true"
                         aria-controls="overlay_tmenu" icon="pi pi-user" severity="info" text rounded aria-label="User" />
-
                     <TieredMenu ref="menu" id="overlay_tmenu" :model="items" popup class="popup" />
                 </div>
-                </div>
+            </div>
         </nav>
     </header>
 </template>

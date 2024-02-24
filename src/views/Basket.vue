@@ -1,17 +1,17 @@
-<script setup >
-import CartBasket from '@/components/CartBasket.vue';
-import EmptyBasket from '@/components/EmptyBasket.vue';
+<script setup  lang="ts">
+import CartBasket from '../components/CartBasket.vue';
+import EmptyBasket from '../components/EmptyBasket.vue';
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useBasketStore } from '../stores/BasketStore';
-import { useUserStore } from '@/stores/UserStore';
+import { useUserStore } from '../stores/UserStore';
 
 const basketStore = useBasketStore();
 const userStore = useUserStore();
 
  
 const order = ref({
-    'user_id': userStore.user.id,
+    'user_id': userStore.user?.id ,
     'pizzaz': JSON.stringify(basketStore.pizzazInBasket),
     'total_price': basketStore.getTotalPrice
 });

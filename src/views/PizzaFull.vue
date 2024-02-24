@@ -1,59 +1,104 @@
-<script setup>
-import { onMounted, ref,computed } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref, computed } from 'vue';
 
-import router from '@/router';
+import router from '../router';
 import { useRoute } from 'vue-router'
 import { usePizzaStore } from '../stores/PizzaStore';
 import { useBasketStore } from '../stores/BasketStore';
 
 const pizzaStore = usePizzaStore();
-const basketStore=useBasketStore();
+const basketStore = useBasketStore();
 
 const route = useRoute();
+interface CrustDiameter {
+    id: number;
+    diameter: number;
+    created_at?: string | null;
+    updated_at?: string | null;
+    pivot?: {
+        pizza_id: number;
+        crust_diameter_id: number;
+    };
+    isInProduction?: boolean;
+}
 
-const crustTypes = ref([
+interface ICrustType {
+    id: number;
+    name: string;
+    created_at?: string | null;
+    updated_at?: string | null;
+    pivot?: {
+        pizza_id: number;
+        crust_type_id: number;
+    };
+    isInProduction?: boolean;
+
+}
+
+interface IPizza {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    crust_diameter: CrustDiameter;
+    crust_type: ICrustType;
+    image_url: string;
+    is_visible: number;
+    created_at: string;
+    updated_at: string;
+    count: number;
+}
+
+
+const crustTypes = ref<ICrustType[]>([
     { id: 1, name: 'Тонкое' },
     { id: 2, name: 'Традиционное' }
 ]);
-const pizzaSizes = ref([
+const pizzaSizes = ref<CrustDiameter[]>([
     { id: 1, diameter: 25 },
     { id: 2, diameter: 30 },
     { id: 3, diameter: 35 },
 ]);
+
+
 const calcPrice = computed(() => {
-  return pizzaStore.pizza.price * activeCurstSize.value
+
+    return pizzaStore.pizza.price * (activeCurstSize.value || 0);
+
 })
 
-const activeCurstType = ref(null);
-const activeCurstSize = ref(null);
+const activeCurstType = ref<number | null>(null);
+const activeCurstSize = ref<number | null>(null);
 
 
-const changeCrustTypes = (id) => {
+const changeCrustTypes = (id: number) => {
     activeCurstType.value = id
 }
 
-const changePizzaSize = (id) => {
+const changePizzaSize = (id: number) => {
     activeCurstSize.value = id
 }
-const localCrustTypesInProdunction = ref([]);
-const localPizzaSizesInProduction = ref([]);
+const localCrustTypesInProdunction = ref<ICrustType[]>([]);
+const localPizzaSizesInProduction = ref<CrustDiameter[]>([]);
 
 onMounted(async () => {
-    await pizzaStore.getPizza(route.params.id);
+    const id: number = +route.params.id;
+    await pizzaStore.getPizza(id);
     pizzaStore.isLoadingPizza = false
-    activeCurstType.value = pizzaStore.pizza.crust_type[0].id;
-    activeCurstSize.value = pizzaStore.pizza.crust_diameter[0].id;
+    activeCurstType.value = pizzaStore.pizza.crust_type.id || 1;
+    activeCurstSize.value = pizzaStore.pizza.crust_diameter.id || 1;
     const pizzaSizesInProduction = pizzaSizes.value.map(pizzaSize => {
         return {
             ...pizzaSize,
-            isInProduction: pizzaStore.pizza.crust_diameter.some(crustDiameter => crustDiameter.id === pizzaSize.id),
+            isInProduction: Array.isArray(pizzaStore.pizza?.crust_diameter) && pizzaStore.pizza?.crust_diameter.some(crustDiameter => crustDiameter.id === pizzaSize.id) || false,
 
         };
     });
     const crustTypesInProdunction = crustTypes.value.map(crustType => {
         return {
             ...crustType,
-            isInProduction: pizzaStore.pizza.crust_type,
+            isInProduction: Array.isArray(pizzaStore.pizza?.crust_type) &&
+                pizzaStore.pizza?.crust_type.some(crustSize => crustSize.id === crustType.id) || false,
 
         }
     })
@@ -61,15 +106,15 @@ onMounted(async () => {
     localPizzaSizesInProduction.value = pizzaSizesInProduction
 
 
-    
-    
+
+
 })
-const addToBasket = (object) => {
+const addToBasket = (object: any) => {
     basketStore.addToBasket(object);
 
     setTimeout(() => {
         router.push({ name: 'Basket' })
-    },500)
+    }, 500)
 
 }
 
@@ -110,7 +155,14 @@ const addToBasket = (object) => {
                 <div class="pizza_add">
 
                     <div class="pizza_price">Цена: {{ calcPrice }}</div>
-                    <div class="btn" @click.prevent="addToBasket({ id: pizzaStore.pizza.id, name: pizzaStore.pizza.name, img_url: pizzaStore.pizza.image_url, crust_type: crustTypes[activeCurstType - 1], crust_diameter: pizzaSizes[activeCurstSize - 1], price: calcPrice })">Добавить</div>
+                    <div class="btn" @click.prevent="addToBasket({
+                        id: pizzaStore.pizza.id,
+                        name: pizzaStore.pizza.name,
+                        image_url: pizzaStore.pizza.image_url,
+                        crust_type: activeCurstType !== null ? crustTypes[activeCurstType - 1] : null,
+                        crust_diameter: activeCurstSize !== null ? pizzaSizes[activeCurstSize - 1] : null,
+                        price: calcPrice
+                    })">Добавить</div>
                 </div>
             </div>
         </div>
@@ -184,7 +236,8 @@ const addToBasket = (object) => {
                 }
 
             }
-            .pizza_add{
+
+            .pizza_add {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -201,8 +254,8 @@ const addToBasket = (object) => {
                     cursor: pointer;
                     transition: all 0.3s ease;
                     position: relative;
-    
-    
+
+
                     &:hover {
                         border-color: rgb(20, 177, 212);
                         background-color: rgb(20, 177, 212);

@@ -3,7 +3,7 @@ import { ref, defineProps, computed } from "vue";
 import { usePizzaStore } from '../stores/PizzaStore'
 import { useBasketStore } from '../stores/BasketStore';
 
-interface CrustDiameter {
+interface CrustDiameter { 
   id: number;
   diameter: number;
   created_at?: string | null;
@@ -23,7 +23,7 @@ interface ICrustType {
     pizza_id: number;
     crust_type_id: number;
   };
-}
+} 
 
 interface IPizza {
   id: number;

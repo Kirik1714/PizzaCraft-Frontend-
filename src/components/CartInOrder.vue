@@ -1,4 +1,8 @@
-<script setup>
+<script setup lang="ts">
+import { defineProps } from 'vue';
+
+
+
 const props = defineProps({
   order: Object
 });
@@ -8,18 +12,18 @@ const props = defineProps({
   <div class="container">
     <div class="order-block">
       <div class="order-number">
-        Номер заказа № <span class="order-number-value">{{ props.order.order_number }}</span>
+        Номер заказа № <span class="order-number-value">{{ props.order?.order_number }}</span>
       </div>
 
       <div class="order-description">
-        <div v-for="pizza in props.order.pizzaz" :key="pizza.id" class="pizza-item">
+        <div v-for="pizza in props.order?.pizzaz" :key="pizza.id" class="pizza-item">
           <div class="pizza-name">{{ pizza.name }}</div>
           <div class="pizza-details">
             Тесто: {{ pizza.crust_type.name }}, Диаметр: {{ pizza.crust_diameter.diameter }},
             Количество: {{ pizza.count }} шт, Цена: {{ pizza.price * pizza.count }}$
           </div>
         </div>
-        <div class="total-price">Итого: {{ props.order.total_price }}$</div>
+        <div class="total-price">Итого: {{ props.order?.total_price }}$</div>
       </div>
     </div>
   </div>
